@@ -1,19 +1,23 @@
 const express = require("express");
 const axios = require("axios");
-const cors = require("cors");
 
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
 
-app.get("/followers/:userid", async (req, res) => {
+app.get("/", (req, res) => {
+    res.send("Roblox Followers API is running 🚀");
+});
+
+app.get("/followers/:userId", async (req, res) => {
+    const userId = req.params.userId;
+
     try {
-        const userId = req.params.userid;
-
         const response = await axios.get(
-            `https://friends.roblox.com/v1/users/${userId}/followers/count`,
+            `https://followers.roblox.com/v1/users/${userId}/followers/count`,
             {
                 headers: {
-                    "User-Agent": "Roblox/WinInet"
+                    "User-Agent": "Mozilla/5.0",
+                    "Accept": "application/json"
                 }
             }
         );
@@ -24,15 +28,13 @@ app.get("/followers/:userid", async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.response?.data || error.message);
-        res.json({
-            success: false,
-            error: "Roblox API blocked request"
+        console.error(error.message);
+        res.status(500).json({
+            error: "Failed to retrieve data from Roblox"
         });
     }
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log("Server running on port " + PORT);
+    console.log(`Server running on port ${PORT}`);
 });
