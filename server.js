@@ -9,15 +9,14 @@ app.get("/followers/:userid", async (req, res) => {
     try {
         const userId = req.params.userid;
 
-const response = await axios.get(
-    `https://friends.roblox.com/v1/users/${userId}/followers/count`,
-    {
-        headers: {
-            "User-Agent": "Mozilla/5.0",
-            "Accept": "application/json"
-        }
-    }
-);
+        const response = await axios.get(
+            `https://friends.roblox.com/v1/users/${userId}/followers/count`,
+            {
+                headers: {
+                    "User-Agent": "Roblox/WinInet"
+                }
+            }
+        );
 
         res.json({
             success: true,
@@ -25,15 +24,15 @@ const response = await axios.get(
         });
 
     } catch (error) {
+        console.log(error.response?.data || error.message);
         res.json({
             success: false,
-            error: "No se pudo obtener seguidores"
+            error: "Roblox API blocked request"
         });
     }
 });
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
-    console.log("Servidor corriendo en puerto " + PORT);
+    console.log("Server running on port " + PORT);
 });
