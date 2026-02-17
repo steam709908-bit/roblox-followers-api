@@ -9,9 +9,15 @@ app.get("/followers/:userid", async (req, res) => {
     try {
         const userId = req.params.userid;
 
-        const response = await axios.get(
-            `https://friends.roblox.com/v1/users/${userId}/followers/count`
-        );
+const response = await axios.get(
+    `https://friends.roblox.com/v1/users/${userId}/followers/count`,
+    {
+        headers: {
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json"
+        }
+    }
+);
 
         res.json({
             success: true,
